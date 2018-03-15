@@ -15,7 +15,7 @@ public class HaiNiuSC implements Runnable {
 	public void run() {
 		int i = 0;
 		while (true) {
-			if (!HaiNiuTest.b) {
+//			if (!HaiNiuTest.b) {
 				synchronized (call) {
 					if (i % 2 == 0) {
 						call.setName("苹果");
@@ -24,12 +24,19 @@ public class HaiNiuSC implements Runnable {
 							call.setName("华为");
 							call.setId("荣耀8-----" + i);
 					}
-					HaiNiuTest.b = true;
+//					HaiNiuTest.b = true;
 					i++;
+					call.notify();// 唤醒消费线程
+					try {
+						call.wait();// 生产线程自己沉睡
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-			} else {
-				System.out.println("还没消费，拒绝生产" + (i+1));
-			}
+//			} else {
+//				System.out.println("还没消费，拒绝生产" + (i+1));
+//			}
 		}
 	}
 }
